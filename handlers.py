@@ -1,15 +1,22 @@
 from random import randint
-
+import keyboards
 from aiogram import types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
-
+import keyboards
 from aiogram.types import ReplyKeyboardRemove, \
     ReplyKeyboardMarkup, KeyboardButton, \
     InlineKeyboardMarkup, InlineKeyboardButton, InputFile
 
 from main import dp, bot
 
+@dp.message_handler(commands=['hi1'])
+async def process_hi1_command(message: types.Message):
+    await message.reply("Первое - изменяем размер клавиатуры", reply_markup=keyboards.button_post)
+
+@dp.message_handler(commands='start')
+async def start_proc(message: types.Message):
+        await message.reply(reply_markup=keyboards.button_post)
 
 @dp.callback_query_handler(text="random_value")
 async def send_random_value(call: types.CallbackQuery):
@@ -28,14 +35,14 @@ async def process_help_command(message: types.Message):
     await message.reply("Выберите пункт меню!")
 
 
-@dp.message_handler(commands=['start'])
+@dp.message_handler(commands=['Menu'])
 async def process_start_command(message: types.Message):
     me = await bot.get_me()
     kb1 = types.InlineKeyboardMarkup()
     kb1.insert(types.InlineKeyboardButton(text="Бесплатная консультация", callback_data="Konsult"))
     kb1.add(types.InlineKeyboardButton(text="О компании", callback_data="Company"))
     kb1.insert(types.InlineKeyboardButton(text="Собрать 🤖", callback_data="robot"))
-    kb1.add(types.InlineKeyboardButton(text="🤖 в коробке", url="https://github.com/Houston1304/practiceBot"))
+    kb1.add(types.InlineKeyboardButton(text="🤖 в коробке", callback_data="robox_box"))
     kb1.insert(types.InlineKeyboardButton(text="🔥Предожение", callback_data="offer"))
     kb1.add(types.InlineKeyboardButton(text="Про бот N.", callback_data="bot_info"))
     kb1.insert(types.InlineKeyboardButton(text="Контакты", callback_data="contacts"))
@@ -53,8 +60,18 @@ async def process_start_command(message: types.Message):
 ✓ повышение лояльности клиентов
 ✓ лидогенерация и многое другое…
 _____
-{message.from_user.first_name}, выберите пункт меню 👇🏻''')
+{message.from_user.first_name}, выберите пункт меню 👇🏻''', )
 
+@dp.callback_query_handler(text_contains='')
+async def qr_message(call:types.callback_query):
+    code = call.data
+    match code:
+        case "Company":
+            await bot.send_message(call.from_user.id, "Все классная компания кста")
+        case "contacts":
+            await bot.send_message(call.from_user.id, "+79151488228")
+        case "robot_box":
+            await bot.answer_web_app_query('https://houston1304.github.io/practiceBot')
 
 
 if __name__ == '__main__':
