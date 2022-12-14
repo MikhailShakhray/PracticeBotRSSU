@@ -1,26 +1,14 @@
-import asyncio
-from os import listdir
-from os.path import isfile, join
 from random import randint
-from unittest.mock import call
-import logging
 
-from aiogram import Bot, types
-from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram import types
 from aiogram.dispatcher import Dispatcher
-from aiogram.types import ParseMode, ChatActions, InputMediaPhoto, InputMediaVideo, InlineKeyboardButton, \
-    InputFile, ReplyKeyboardRemove, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup
 from aiogram.utils import executor
-from aiogram.utils.emoji import emojize
-from aiogram.utils.markdown import pre
 
-from config import TOKEN
+from aiogram.types import ReplyKeyboardRemove, \
+    ReplyKeyboardMarkup, KeyboardButton, \
+    InlineKeyboardMarkup, InlineKeyboardButton, InputFile
 
-
-bot = Bot(token=TOKEN)
-dp = Dispatcher(bot)
-Photo = InputFile("C:/Users/user/Desktop/бот/icon.jpg")
-Voice = InputFile("C:/Users/user/Desktop/ПАПКА/1/Абоба.mp3")
+from main import dp, bot
 
 
 @dp.callback_query_handler(text="random_value")
@@ -35,6 +23,11 @@ async def cmd_random(message: types.Message):
     await message.answer("Нажмите на кнопку, чтобы бот отправил число от 1 до 10", reply_markup=keyboard)
 
 
+@dp.message_handler(commands=['help'])
+async def process_help_command(message: types.Message):
+    await message.reply("Выберите пункт меню!")
+
+
 @dp.message_handler(commands=['start'])
 async def process_start_command(message: types.Message):
     me = await bot.get_me()
@@ -42,7 +35,7 @@ async def process_start_command(message: types.Message):
     kb1.insert(types.InlineKeyboardButton(text="Бесплатная консультация", callback_data="Konsult"))
     kb1.add(types.InlineKeyboardButton(text="О компании", callback_data="Company"))
     kb1.insert(types.InlineKeyboardButton(text="Собрать 🤖", callback_data="robot"))
-    kb1.add(types.InlineKeyboardButton(text="🤖 в коробке", callback_data="robot_box"))
+    kb1.add(types.InlineKeyboardButton(text="🤖 в коробке", url="https://github.com/Houston1304/practiceBot"))
     kb1.insert(types.InlineKeyboardButton(text="🔥Предожение", callback_data="offer"))
     kb1.add(types.InlineKeyboardButton(text="Про бот N.", callback_data="bot_info"))
     kb1.insert(types.InlineKeyboardButton(text="Контакты", callback_data="contacts"))
@@ -63,13 +56,6 @@ _____
 {message.from_user.first_name}, выберите пункт меню 👇🏻''')
 
 
-@dp.message_handler(commands=['help'])
-async def process_help_command(message: types.Message):
-    await message.reply("Выберите пункт меню!")
-
 
 if __name__ == '__main__':
     executor.start_polling(dp)
-
-
-
