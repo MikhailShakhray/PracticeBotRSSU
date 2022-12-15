@@ -1,12 +1,23 @@
-from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
-
-button_hi = KeyboardButton('Привет! 👋')
-
-button_post = KeyboardButton('Предложить пост в канал')
-
-post_kb = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True
-                              ).add(button_post)
-
-greet_kb = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True
-                               ).add(button_hi)
-
+# import types
+#
+# import kb as kb
+# from aiogram.types import ReplyKeyboardRemove, ReplyKeyboardMarkup, KeyboardButton
+# from aiogram.utils import executor
+#
+# from main import dp
+#
+#
+# @dp.message_handler(commands=['start'])
+# async  def keyboards(message: types.Message):
+#     kb = [
+#         [
+#             types.KeyboardButton('Привет! 👋'),
+#             types.KeyboardButton('Предложить пост в канал'),
+#             types.KeyboardButton('Вопросы и ответы')
+#         ],
+#     ]
+#     keyboard = types.ReplyKeyboardMarkup(keyboard=kb)
+#     await message.reply('Привет еще раз', reply_markup=keyboard)
+#
+# if __name__ == '__main__':
+#     executor.start_polling(dp)
